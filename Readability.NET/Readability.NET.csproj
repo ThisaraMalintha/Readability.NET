@@ -33,5 +33,5 @@
 	<ItemGroup>
 		<None Include=".\lib\dist\*.wasm" CopyToOutputDirectory="PreserveNewest" LinkBase="" />
 	</ItemGroup>
-	
+
 </Project>

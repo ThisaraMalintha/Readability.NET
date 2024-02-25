@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "webpack --mode development --env development",
-    "prod": "webpack --mode production --env production",
-    "wasm-dev": "webpack --mode development --env development && javy compile ./dist/mozilla-readability.js -o ./dist/mozilla-readability.wasm"
+    "wasm-dev": "webpack --mode development --env development && javy compile ./dist/mozilla-readability.js -o ./dist/mozilla-readability.wasm",
+    "wasm-prod": "webpack --mode production --env production && javy compile ./dist/mozilla-readability.js -o ./dist/mozilla-readability.wasm"
   },
   "author": "ThisaraMalintha",
   "license": "ISC",
