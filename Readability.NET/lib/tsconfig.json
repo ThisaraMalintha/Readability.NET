@@ -1,0 +1,15 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+      "noImplicitAny": true,
+      "noEmitOnError": true,
+      "removeComments": false,
+      "sourceMap": true,
+      //"sourceRoot": "/assets/ts-maps",
+      "module": "es6",
+      "target": "es6",
+      "lib": [ "dom", "ES2015" ],
+      "allowJs": false,
+      "moduleResolution": "node"
+    }
+  }
