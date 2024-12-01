@@ -1,12 +1,12 @@
 import { Readability } from "@mozilla/readability";
-import { DOMParser } from "linkedom/worker";
-import { parseHTML } from "linkedom/worker";
+import { DOMParser, parseHTML } from "linkedom/worker";
 
 export default function parse(html: string) {
-    const document = parseHTML(html);
+    const htmlDoc = parseHTML(html);
 
-    (<any>document.window.document.firstChild).__JSDOMParser__ = new DOMParser(); // Readability needs this
+    (<any>htmlDoc.document.firstChild).__JSDOMParser__ = new DOMParser(); // Inject the DOM parser into the Readability.js
 
-    const reader = new Readability(document.window.document);
+    const reader = new Readability(htmlDoc.document, { debug: false });
+
     return reader.parse();
 }

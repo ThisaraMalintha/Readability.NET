@@ -4,11 +4,10 @@
       "noImplicitAny": true,
       "noEmitOnError": true,
       "removeComments": false,
-      "sourceMap": true,
-      //"sourceRoot": "/assets/ts-maps",
-      "module": "es6",
-      "target": "es6",
-      "lib": [ "dom", "ES2015" ],
+      "sourceMap": false,
+      "module": "ES2022",
+      "target": "ES2022",
+      "lib": [ "dom", "ES2023" ],
       "allowJs": false,
       "moduleResolution": "node"
     }

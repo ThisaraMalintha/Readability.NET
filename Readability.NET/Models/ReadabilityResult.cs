@@ -11,7 +11,9 @@ public class ReadabilityResult
     public int Length { get; set; }
     public string? Excerpt { get; set; }
     public string? SiteName { get; set; }
-    public DateTime? PublishedTime { get; set; }
+
+    [JsonConverter(typeof(StringToDateTimeJsonConverter))]
+    public DateTimeOffset? PublishedTime { get; set; }
 }
 
 public enum HtmlContentDirection
