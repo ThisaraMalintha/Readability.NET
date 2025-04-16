@@ -11,25 +11,18 @@ internal static class HttpClientExtensions
             throw new ArgumentException($"'{nameof(url)}' cannot be null or empty.", nameof(url));
         }
 
-        try
+        var response = await httpClient.GetAsync(url).ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode)
         {
-            var response = await httpClient.GetAsync(url).ConfigureAwait(false);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Request failed. Status:{response.StatusCode}");
-            }
-
-            if (response.Content.Headers.ContentType.MediaType != MediaTypeNames.Text.Html)
-            {
-                throw new Exception("No html content found");
-            }
-
-            return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            throw new Exception($"Request failed. Status:{response.StatusCode}");
         }
-        catch (Exception)
+
+        if (response.Content.Headers.ContentType.MediaType != MediaTypeNames.Text.Html)
         {
-            throw;
+            throw new Exception("No html content found");
         }
+
+        return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
     }
 }

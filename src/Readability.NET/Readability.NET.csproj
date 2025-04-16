@@ -5,7 +5,7 @@
 		<LangVersion>latest</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Version>0.1.1-pre-release</Version>
 		<PackageId>Readability.NET</PackageId>
 		<Title>Readability.NET</Title>
@@ -22,25 +22,25 @@
 
 	<!-- Embed the readability wasm module -->
 	<ItemGroup>
-		<EmbeddedResource Include="lib\dist\mozilla-readability.wasm" />
+		<EmbeddedResource Include="Wasm\lib\dist\mozilla-readability.wasm" />
 	</ItemGroup>
 
 	<!--
       1. Install npm packages
    -->
-	<Target Name="NpmInstall" Inputs="package.json" Outputs="node_modules\.install-stamp">
-		<Exec WorkingDirectory=".\lib" Command="pnpm install" />
+	<Target Name="NpmInstall" Inputs=".\Wasm\lib\package.json" Outputs=".\Wasm\lib\node_modules\.install-stamp">
+		<Exec WorkingDirectory=".\Wasm\lib" Command="pnpm install" />
 
 		<!-- Write the stamp file, so incremental builds work -->
-		<Touch Files=".\lib\node_modules\.install-stamp" AlwaysCreate="true" />
+		<Touch Files=".\Wasm\lib\node_modules\.install-stamp" AlwaysCreate="true" />
 	</Target>
 
 	<!--
       2. Run npm tasks
    -->
 	<Target Name="NpmTasks" DependsOnTargets="NpmInstall" BeforeTargets="BeforeBuild">
-		<Exec WorkingDirectory=".\lib" Condition="'$(Configuration)' == 'Debug'" Command="npm run wasm-dev" />
-		<Exec WorkingDirectory=".\lib" Condition="'$(Configuration)' == 'Release'" Command="npm run wasm-prod" />
+		<Exec WorkingDirectory=".\Wasm\lib" Condition="'$(Configuration)' == 'Debug'" Command="npm run wasm-dev" />
+		<Exec WorkingDirectory=".\Wasm\lib" Condition="'$(Configuration)' == 'Release'" Command="npm run wasm-prod" />
 	</Target>
 
 </Project>

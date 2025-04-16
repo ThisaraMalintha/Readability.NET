@@ -4,6 +4,7 @@ public class Readability : IReadability
 {
     private readonly HttpClient? _httpClient;
     private readonly IHttpClientFactory? _httpClientFactory;
+    private readonly IReadabilityWasmModule _readabilityWasmModule = new ReadabilityWasmModule();
 
     private static readonly JsonSerializerOptions _jsonOptions = new()
     {
@@ -24,7 +25,7 @@ public class Readability : IReadability
         _httpClient = httpClient ?? new HttpClient();
     }
 
-    public async Task<ReadabilityResult> ParseUrl(string url, ReadabilityOptions? options = null)
+    public async Task<ReadabilityResult> ParseUrl(string url, ReadabilityOptions? options = default)
     {
         try
         {
@@ -44,11 +45,9 @@ public class Readability : IReadability
         }
     }
 
-    public async Task<ReadabilityResult> ParseHtml(string html, ReadabilityOptions? options = null)
+    public async Task<ReadabilityResult> ParseHtml(string html, ReadabilityOptions? options = default)
     {
-        var result = await WasmHelper.InvokeModule(html);
-
-        return JsonSerializer.Deserialize<ReadabilityResult>(result, _jsonOptions)!;
+        return await _readabilityWasmModule.Invoke(html, options);
     }
 
     private HttpClient GetHttpClient()

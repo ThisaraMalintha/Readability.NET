@@ -1,6 +1,8 @@
-﻿global using Readability.NET.Extensions;
+﻿global using Readability.NET.Exceptions;
+global using Readability.NET.Extensions;
 global using Readability.NET.Helpers;
 global using Readability.NET.Models;
+global using Readability.NET.Wasm;
 global using System.Reflection;
 global using System.Text;
 global using System.Text.Json;

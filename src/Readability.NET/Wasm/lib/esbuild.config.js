@@ -1,7 +1,7 @@
 const esbuild = require('esbuild');
 
 esbuild.build({
-    entryPoints: ["./wasm-driver.ts"],
+    entryPoints: ["./readability-javy-wrapper.ts"],
     outfile: "./dist/mozilla-readability.js",
     bundle: true,
     minify: false,
