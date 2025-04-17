@@ -98,7 +98,7 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
 
         var result = JsonSerializer.Deserialize(stdOutText, ReadabilityJsonSerializerContext.Default.ReadabilityResult);
 
-        if(result is null)
+        if (result is null)
         {
             return ReadabilityResult.Fail();
         }

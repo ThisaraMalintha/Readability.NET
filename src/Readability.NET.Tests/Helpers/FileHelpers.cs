@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Readability.NET.Tests.Helpers;
+﻿namespace Readability.NET.Tests.Helpers;
 
 internal static class FileHelpers
 {

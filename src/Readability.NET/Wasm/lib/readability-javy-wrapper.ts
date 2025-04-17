@@ -12,7 +12,7 @@ const input = JSON.parse(new TextDecoder().decode(inputBuffer));
 const { html, options } = input;
 
 if (!html) {
-    throw "Please provide a valid html string"
+    throw "Html input not found";
 }
 
 const readabilityResult = parse(html, options);

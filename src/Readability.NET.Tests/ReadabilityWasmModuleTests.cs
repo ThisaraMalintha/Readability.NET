@@ -1,6 +1,3 @@
-using Readability.NET.Tests.Helpers;
-using Readability.NET.Wasm;
-
 namespace Readability.NET.Tests;
 
 [TestFixture]
@@ -30,7 +27,7 @@ public class ReadabilityWasmModuleTests
     }
 
     [TestCase("./TestPages/bad-1.html")]
-    public async Task Invoke_Should_Be_Return_Failed_Result_For_Bad_Input(string htmlFile)
+    public async Task Invoke_Should_Fail_For_Bad_Input(string htmlFile)
     {
         var fileContent = await FileHelpers.GetFileContent(htmlFile);
 
@@ -42,5 +39,16 @@ public class ReadabilityWasmModuleTests
             Assert.That(result.IsSuccess, Is.False);
             Assert.That(result.Content, Is.Null);
         });
+    }
+
+    [Test]
+    public void Invoke_Should_Output_Wasm_Error_Details_In_Exceptions()
+    {
+        const string MissingHtmlErrorMessage = "Html input not found";
+        const string? BadHtmlInput = null;
+
+        var readabilityException = Assert.ThrowsAsync<ReadabilityException>(() => _wasm.Invoke(BadHtmlInput!));
+
+        Assert.That(readabilityException.Message, Contains.Substring(MissingHtmlErrorMessage));
     }
 }
