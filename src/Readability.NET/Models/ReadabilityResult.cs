@@ -2,6 +2,7 @@
 
 public class ReadabilityResult
 {
+    public bool IsSuccess { get; set; }
     public string? Title { get; set; }
     public string? Byline { get; set; }
     public HtmlContentDirection? Dir { get; set; } = HtmlContentDirection.ltr;
@@ -14,6 +15,14 @@ public class ReadabilityResult
 
     [JsonConverter(typeof(StringToDateTimeJsonConverter))]
     public DateTimeOffset? PublishedTime { get; set; }
+
+    public string? DebugLog { get; set; }
+
+    public static ReadabilityResult Fail(string? debugLog = null) => new()
+    {
+        IsSuccess = false,
+        DebugLog = debugLog
+    };
 }
 
 public enum HtmlContentDirection

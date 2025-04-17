@@ -8,6 +8,9 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
 
     private static readonly Engine _engine = new();
 
+    // Separator for the StdOut file debug log and the actual readability result json.
+    private const string DebugLogBoundary = "###DEBUG_END###";
+
     public async Task<ReadabilityResult> Invoke(string html, ReadabilityOptions? options = default)
     {
         var instanceId = Guid.NewGuid().ToString();
@@ -26,9 +29,8 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
 
             using var streamReader = new StreamReader($"{instanceId}_stdout.f");
 
-            var result = await streamReader.ReadToEndAsync();
-
-            return JsonSerializer.Deserialize(result, ReadabilityJsonSerializerContext.Default.ReadabilityResult);
+            return await ReadReadabilityResultFromStdOut(stdOut, options)
+                .ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -37,7 +39,7 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
             if (File.Exists(stdError))
             {
                 using var errReader = new StreamReader(stdError, Encoding.UTF8);
-                wasmError = string.Join(Environment.NewLine, File.ReadLines(stdError).Take(1000));
+                wasmError = string.Join(Environment.NewLine, File.ReadLines(stdError).Take(10_000));
             }
 
             throw new ReadabilityException(wasmError, ex);
@@ -81,6 +83,55 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
 
         await streamWriter.WriteAsync(wasmInputJson).ConfigureAwait(false);
         await streamWriter.FlushAsync().ConfigureAwait(false);
+    }
+
+    private static async Task<ReadabilityResult> ReadReadabilityResultFromStdOut(string stdOut, ReadabilityOptions? options)
+    {
+        using var streamReader = new StreamReader(stdOut);
+
+        var stdOutText = await streamReader.ReadToEndAsync();
+
+        if (options?.Debug == true)
+        {
+            return GetReadabilityResultWithDebugLog(stdOutText);
+        }
+
+        var result = JsonSerializer.Deserialize(stdOutText, ReadabilityJsonSerializerContext.Default.ReadabilityResult);
+
+        if(result is null)
+        {
+            return ReadabilityResult.Fail();
+        }
+
+        result.IsSuccess = true;
+        return result;
+    }
+
+    private static ReadabilityResult GetReadabilityResultWithDebugLog(string stdOutText)
+    {
+        var debugEndIndex = stdOutText.IndexOf(DebugLogBoundary);
+
+        if (debugEndIndex < 0)
+        {
+            throw new Exception("Readability result reading failed");
+        }
+
+        var readabilityResultStartIndex = debugEndIndex + DebugLogBoundary.Length;
+
+        var debugLog = stdOutText[..debugEndIndex];
+
+        var readabilityResult = JsonSerializer.Deserialize(stdOutText[readabilityResultStartIndex..],
+            ReadabilityJsonSerializerContext.Default.ReadabilityResult);
+
+        if (readabilityResult is null)
+        {
+            return ReadabilityResult.Fail(debugLog);
+        }
+
+        readabilityResult.DebugLog = debugLog;
+        readabilityResult.IsSuccess = true;
+
+        return readabilityResult;
     }
 
     internal class ReadabilityWasmInput(string html, ReadabilityOptions options)

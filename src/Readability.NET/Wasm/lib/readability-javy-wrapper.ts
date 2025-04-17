@@ -17,6 +17,11 @@ if (!html) {
 
 const readabilityResult = parse(html, options);
 
+if (options.debug) {
+    // Write the debug log separator, so that we can reiliably identify the debug log and the readability result separately.
+    writeFileSync(STDIO.Stdout, textEncoder.encode("###DEBUG_END###"));
+}
+
 writeFileSync(STDIO.Stdout, textEncoder.encode(JSON.stringify(readabilityResult)));
 
 function parse(html: string, options: unknown) {
