@@ -1,5 +1,5 @@
 import { Readability } from "@mozilla/readability";
-import { DOMParser, parseHTML } from "linkedom/worker";
+import { parseHTML } from "linkedom/worker";
 
 const { readFileSync, writeFileSync, STDIO } = require('javy/fs');
 
@@ -19,11 +19,8 @@ const readabilityResult = parse(html, options);
 
 writeFileSync(STDIO.Stdout, textEncoder.encode(JSON.stringify(readabilityResult)));
 
-
 function parse(html: string, options: unknown) {
     const htmlDoc = parseHTML(html);
-
-    (<any>htmlDoc.document.firstChild).__JSDOMParser__ = new DOMParser(); // Inject the DOM parser into the Readability.js
 
     const reader = new Readability(htmlDoc.document, options);
 
