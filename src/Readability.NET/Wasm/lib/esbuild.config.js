@@ -6,7 +6,7 @@ esbuild.build({
     bundle: true,
     minify: false,
     sourcemap: true,
-    format: 'esm', // or 'cjs' for CommonJS
+    format: 'esm',
     splitting: false,
     target: 'es2020',
     logLevel: 'info',

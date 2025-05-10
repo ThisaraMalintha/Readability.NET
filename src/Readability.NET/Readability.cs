@@ -1,6 +1,6 @@
 ﻿namespace Readability.NET;
 
-public class Readability : IReadability
+public class Readability : IReadability, IDisposable
 {
     private readonly HttpClient? _httpClient;
     private readonly IHttpClientFactory? _httpClientFactory;
@@ -39,6 +39,11 @@ public class Readability : IReadability
     public async Task<ReadabilityResult> ParseHtml(string html, ReadabilityOptions? options = default)
     {
         return await _readabilityWasmModule.Invoke(html, options);
+    }
+
+    public void Dispose()
+    {
+        _readabilityWasmModule.Dispose();
     }
 
     private HttpClient GetHttpClient()

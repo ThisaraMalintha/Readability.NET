@@ -5,11 +5,11 @@ namespace Readability.NET.Wasm;
 public class ReadabilityWasmModule : IReadabilityWasmModule
 {
     private const string WasmFileResourceKey = "Readability.NET.Wasm.lib.dist.mozilla-readability.wasm";
-
-    private static readonly Engine _engine = new();
-
+    
     // Separator for the StdOut file debug log and the actual readability result json.
     private const string DebugLogBoundary = "###DEBUG_END###";
+
+    private readonly Engine _engine = new();
 
     public async Task<ReadabilityResult> Invoke(string html, ReadabilityOptions? options = default)
     {
@@ -52,7 +52,12 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
         }
     }
 
-    private static void InvokeJavyWasmFunction(string stdIn, string stdOut, string stdError)
+    public void Dispose()
+    {
+        _engine.Dispose();
+    }
+
+    private void InvokeJavyWasmFunction(string stdIn, string stdOut, string stdError)
     {
         using var wasmModuleStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(WasmFileResourceKey);
         using var store = new Store(_engine);

@@ -11,6 +11,12 @@ public class ReadabilityWasmModuleTests
         _wasm = new ReadabilityWasmModule();
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        _wasm.Dispose();
+    }
+
     [TestCase("./TestPages/good-1.html")]
     public async Task Invoke_Should_Be_Successful_For_Good_Input(string htmlFile)
     {
