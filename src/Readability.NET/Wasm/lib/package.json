@@ -14,7 +14,7 @@
     "linkedom": "^0.18.9"
   },
   "devDependencies": {
-    "javy-cli": "^0.2.0",
-    "esbuild": "0.25.1"
+    "javy-cli": "^3.0.1",
+    "esbuild": "^0.25.1"
   }
 }
