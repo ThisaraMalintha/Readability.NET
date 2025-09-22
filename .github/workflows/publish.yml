@@ -23,18 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Print working Dir
-        run: pwd
-
-      # Print dotnet version
-      - name: Display .NET Version
+      - name: Print .NET Version
         run: dotnet --version
       
       - name: Build Solution
         run: dotnet build -c Release
       
       - name: Run Unit Tests
-        run: dotnet test --no-build
+        run: dotnet test -c Release --no-build
 
       - name: Publish Project
         run: dotnet publish -p Readability.NET -c Release --no-build
