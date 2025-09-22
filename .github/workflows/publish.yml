@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Print working Dir
+        run: pwd
+
       # Print dotnet version
       - name: Display .NET Version
         run: dotnet --version
