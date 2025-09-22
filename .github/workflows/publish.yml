@@ -1,9 +1,6 @@
 name: Publish to Nuget.org
 
 on:
-  push:
-    branches:
-      - 'feature/actions-workflow'
   workflow_dispatch:
     inputs:
       package_version:
@@ -37,14 +34,14 @@ jobs:
         run: dotnet test -c Release --no-build
 
       - name: Pack NuGet package
-        run: dotnet pack ${{ env.PROJECT_NAME }} --configuration Release --no-build -p:PackageVersion=0.1.2-pre-release --output ./artifacts
+        run: dotnet pack ${{ env.PROJECT_NAME }} --configuration Release --no-build -p:PackageVersion=${{ inputs.package_version }} --output ./artifacts
 
       # Get a short-lived NuGet API key
       - name: NuGet login (OIDC → temp API key)
         uses: NuGet/login@v1
         id: login
         with:
-          user: thisaram
+          user: ${{ secrets.NUGET_USERNAME }}
         
       - name: Publish to Nuget
         run: dotnet nuget push artifacts/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
