@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+    defaults:
+      run:
+        working-directory: ./src
 
     steps:
       - uses: actions/checkout@v5
