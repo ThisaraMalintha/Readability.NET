@@ -11,6 +11,10 @@ on:
         required: true
         type: string
 
+env:
+  PROJECT_NAME: 'Readability.NET'
+  NUPKG_NAME: 'readability-net.nupkg'
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -32,5 +36,15 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test -c Release --no-build
 
-      - name: Publish Project
-        run: dotnet publish -p Readability.NET -c Release --no-build
+      - name: Pack NuGet package
+        run: dotnet pack ${{ env.PROJECT_NAME }} --configuration Release --no-build -p:PackageVersion=0.1.2-pre-release --output ./artifacts/${{env.NUPKG_NAME}}
+
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: thisaram
+        
+      - name: Publish to Nuget
+        run: dotnet nuget push artifacts/my-sdk.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
