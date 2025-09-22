@@ -1,6 +1,9 @@
 name: Publish to Nuget.org
 
 on:
+  push:
+    branches:
+      - 'feature/actions-workflow'
   workflow_dispatch:
     inputs:
       package_version:
