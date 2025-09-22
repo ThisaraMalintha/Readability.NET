@@ -1,0 +1,31 @@
+name: Publish to Nuget.org
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_version:
+        description: 'Package version'
+        required: true
+        type: string
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      # Print dotnet version
+      - name: Display .NET Version
+        run: dotnet --version
+      
+      - name: Build Solution
+        run: dotnet build -c Release
+      
+      - name: Run Unit Tests
+        run: dotnet test --no-build
+
+      - name: Publish Project
+        run: dotnet publish -p Readability.NET -c Release --no-build
