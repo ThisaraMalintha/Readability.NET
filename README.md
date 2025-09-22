@@ -9,7 +9,7 @@ WebAssembly based .NET wrapper for the Mozilla [readability](https://github.com/
 ```csharp
 using Readability.NET;
 
-var readability = new Readability();
+using var readability = new Readability();
 
 // Passing the url
 var urlResult = await readability.ParseUrl("<URL>");
