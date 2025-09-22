@@ -27,8 +27,6 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
             await Task.Run(() => InvokeJavyWasmFunction(stdIn, stdOut, stdError))
                 .ConfigureAwait(false);
 
-            using var streamReader = new StreamReader($"{instanceId}_stdout.f");
-
             return await ReadReadabilityResultFromStdOut(stdOut, options)
                 .ConfigureAwait(false);
         }
@@ -38,7 +36,6 @@ public class ReadabilityWasmModule : IReadabilityWasmModule
 
             if (File.Exists(stdError))
             {
-                using var errReader = new StreamReader(stdError, Encoding.UTF8);
                 wasmError = string.Join(Environment.NewLine, File.ReadLines(stdError).Take(10_000));
             }
 
