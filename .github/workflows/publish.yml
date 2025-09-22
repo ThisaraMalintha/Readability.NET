@@ -44,7 +44,7 @@ jobs:
         uses: NuGet/login@v1
         id: login
         with:
-          user: ThisaraMalintha
+          user: thisaram
         
       - name: Publish to Nuget
         run: dotnet nuget push artifacts/${{env.NUPKG_NAME}} --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
