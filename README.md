@@ -1,3 +1,5 @@
+[![NuGet Version](https://img.shields.io/nuget/v/Readability.NET.svg)](https://www.nuget.org/packages/Readability.NET/)
+
 # Readability.NET
 WebAssembly based .NET wrapper for the Mozilla [readability](https://github.com/mozilla/readability) javascript library. Readability is the library used by the Mozilla Firefox reader view to extract readable content from html.
 
