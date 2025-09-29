@@ -5,6 +5,6 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/src/"
+    directory: "/src/Readability.NET/Wasm/lib"
     schedule:
       interval: "weekly"
