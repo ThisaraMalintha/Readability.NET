@@ -1,4 +1,4 @@
-name: Publish to Nuget.org
+name: Publish to Nuget
 
 on:
   workflow_dispatch:
@@ -10,11 +10,11 @@ on:
 
 env:
   PROJECT_NAME: 'Readability.NET'
-  NUPKG_NAME: 'readability-net.nupkg'
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       id-token: write
     defaults:
@@ -23,9 +23,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: master
 
-      - name: Print .NET Version
-        run: dotnet --version
+      - name: Print package version
+        run: echo ${{ inputs.package_version }}
       
       - name: Build Solution
         run: dotnet build -c Release
