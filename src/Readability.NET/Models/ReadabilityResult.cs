@@ -27,6 +27,7 @@ public class ReadabilityResult
 
 public enum HtmlContentDirection
 {
+    auto,
     ltr,
     rtl
 }
