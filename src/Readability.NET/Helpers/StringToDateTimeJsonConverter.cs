@@ -1,18 +1,18 @@
 ﻿namespace Readability.NET.Helpers;
 
-internal class StringToDateTimeJsonConverter : JsonConverter<DateTimeOffset>
+internal class StringToDateTimeJsonConverter : JsonConverter<DateTimeOffset?>
 {
-    public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override DateTimeOffset? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.String)
         {
             throw new InvalidOperationException();
         }
 
-        return DateTimeOffset.Parse(reader.GetString());
+        return DateTimeOffset.TryParse(reader.GetString(), out var dateTime) ? dateTime : null;
     }
 
-    public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }

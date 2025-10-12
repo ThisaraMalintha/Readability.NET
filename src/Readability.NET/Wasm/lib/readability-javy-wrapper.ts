@@ -22,6 +22,11 @@ if (options.debug) {
     writeFileSync(STDIO.Stdout, textEncoder.encode("###DEBUG_END###"));
 }
 
+// Try to ensure ISO date time strings
+if (readabilityResult?.publishedTime) {
+    readabilityResult.publishedTime = tryConvertDateTimeToISO8601(readabilityResult.publishedTime);
+}
+
 writeFileSync(STDIO.Stdout, textEncoder.encode(JSON.stringify(readabilityResult)));
 
 function parse(html: string, options: unknown) {
@@ -30,4 +35,13 @@ function parse(html: string, options: unknown) {
     const reader = new Readability(htmlDoc.document, options);
 
     return reader.parse();
+}
+
+function tryConvertDateTimeToISO8601(dateTimeString: string) {
+    try {
+        const dateTime = new Date(dateTimeString);
+        return dateTime.toISOString();
+    } catch {
+        return dateTimeString;
+    }
 }
